@@ -15,4 +15,6 @@ class Card {
     
         Card(std::string front, std::string back, int group, std::time_t next_review = std::time(nullptr))
             : id(next_id++), front(front), back(back), group(group), next_review(next_review) {}
+
+        const int get_id() const {return id;}
 };
