@@ -49,7 +49,7 @@ void Deck::browse() {
         } else {
             char buf[80];
             strftime(buf, sizeof(buf), "%d/%m/%Y %H:%M:%S", local_review_time);
-            std::cout << "next review: " << buf << "\n";
+            std::cout << buf << "\n";
         }
         std::cout << "front: " << curr.front << '\n';
         std::cout << "back: " << curr.back << '\n';
