@@ -1,8 +1,21 @@
 #include <iostream>
+#include <algorithm>
 #include "deck.h"
 
 void Deck::add_card(const std::string& front, const std::string& back) {
     cards.emplace_back(front, back, 1, std::time(nullptr));
+}
+
+void Deck::delete_card(const int target_id) {
+    auto p = std::find_if(cards.begin(), cards.end(), [target_id](const Card& c){
+        return c.get_id() == target_id;
+    });
+    if (p == cards.end()) {
+        std::cout << "no card with such id found!" << '\n';
+    } else {
+        cards.erase(p);
+        std::cout << "card deleted!" << '\n';
+    }
 }
 
 void Deck::review_cards() {

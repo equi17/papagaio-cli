@@ -47,7 +47,11 @@ int main() {
             myDeck.browse();
         }
         else if (choice == 5) {
-            break;
+            int target_id;
+            std::cout << "enter id of card to be deleted:\n";
+            std::cout << "(can be found in card browser)\n";
+            std::cin >> target_id;
+            myDeck.delete_card(target_id);
         }
         else if (choice == 6) {
             break;

@@ -8,6 +8,7 @@ class Deck{
     int day = 0;
 public:
     void add_card(const std::string& front, const std::string& back);
+    void delete_card(const int target_id);
     void review_cards();
     void browse();
     void skip_day();
