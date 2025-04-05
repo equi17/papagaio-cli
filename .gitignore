@@ -31,6 +31,9 @@
 *.out
 *.app
 
+# VSCode
+.vscode
+
 # CMake
 CMakeLists.txt.user
 CMakeCache.txt
