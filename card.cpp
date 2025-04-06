@@ -18,7 +18,7 @@ void Card::reset() {
     ease = std::max(1.3f, ease - 0.15f);   // penalize ease (min 1.3)
     interval = 1;
     repetitions = 0;
-    next_review = std::time(nullptr) + 1440; // next review in 10 min
+    next_review = std::time(nullptr) + 10; // next review in 10 min
 }
         
 void Card::advance(int days_skipped) {
