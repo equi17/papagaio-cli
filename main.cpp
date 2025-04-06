@@ -1,9 +1,4 @@
 #include <iostream>
-#include <vector>
-#include <string>
-#include <ctime>
-#include <limits>
-
 #include "cardmanager.h"
 
 int Card::next_id = 1;

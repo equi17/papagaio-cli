@@ -1,5 +1,4 @@
 #pragma once
-#include <ctime>
 #include <vector>
 #include <functional>
 #include "card.h"
