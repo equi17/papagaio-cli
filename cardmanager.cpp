@@ -56,7 +56,7 @@ int CardManager::get_int_input(const std::string& prompt) {
         if(std::cin.fail()) {
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "error! please enter a number";
+            std::cout << "error! please enter a number\n";
         } else {
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             return value;
