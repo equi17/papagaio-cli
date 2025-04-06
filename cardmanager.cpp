@@ -21,11 +21,9 @@ void CardManager::review_cards() {
          time_t now = std::time(nullptr) + deck_.get_days_skipped() * 86400;
  
          if (correct == "y" || correct == "Y") {
-             card.next_review = now + (card.group * 86400);
-             card.group++;
+             card.update(true, deck_.get_days_skipped());
          } else {
-             card.next_review = now + 86400;
-             card.group = 1;
+             card.update(false, deck_.get_days_skipped());
          }
     });
 }

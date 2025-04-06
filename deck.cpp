@@ -4,7 +4,7 @@
 #include "deck.h"
 
 void Deck::add_card(const std::string& front, const std::string& back) {
-    cards_.emplace_back(front, back, 1, std::time(nullptr));
+    cards_.emplace_back(front, back);
 }
 
 bool Deck::delete_card(const int target_id) {
@@ -22,7 +22,8 @@ bool Deck::delete_card(const int target_id) {
 void Deck::review_cards(std::function<void(Card&)> review_logic) {
     for(Card& card: cards_) {
         time_t now = std::time(nullptr) + day * 86400;
-        if(std::difftime(now, card.next_review) >= 0) {
+        time_t next_review = card.next_review;
+        if(std::difftime(now, next_review) >= 0) {
             review_logic(card);
         }
     }
@@ -46,7 +47,7 @@ void Deck::browse() const {
         std::cout << "================================\n";
         std::cout << "id: " << curr.get_id() << '\n';
         std::cout << "next review: ";
-        if(std::difftime(now, curr.next_review) >= 0) {
+        if(std::difftime(now, review_time) >= 0) {
             std::cout << "ready for review!\n";
         } else {
             char buf[80];
