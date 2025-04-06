@@ -1,45 +1,30 @@
 #include <iostream>
 #include <algorithm>
+#include <functional>
 #include "deck.h"
 
 void Deck::add_card(const std::string& front, const std::string& back) {
     cards_.emplace_back(front, back, 1, std::time(nullptr));
 }
 
-void Deck::delete_card(const int target_id) {
-    auto p = std::find_if(cards_.begin(), cards_.end(), [target_id](const Card& c){
-        return c.get_id() == target_id;
-    });
-    if (p == cards_.end()) {
-        std::cout << "no card with such id found!" << '\n';
-    } else {
-        cards_.erase(p);
-        std::cout << "card deleted!" << '\n';
+bool Deck::delete_card(const int target_id) {
+    auto it = std::find_if(cards_.begin(), cards_.end(), 
+        [target_id](const Card& c){ return c.get_id() == target_id; }
+    );
+
+    if (it != cards_.end()) {
+        cards_.erase(it);
+        return false;
     }
+    return true;
 }
 
-void Deck::review_cards() {
-    std::string answer;
-    for(Card& curr: cards_) {
+void Deck::review_cards(std::function<void(Card&)> review_logic) {
+    for(Card& card: cards_) {
         time_t now = std::time(nullptr) + day * 86400;
-        if(std::difftime(now, curr.next_review) >= 0) {
-            std::cout << "front: " << curr.front << '\n';
-            std::cout << "enter your answer:\n";
-            getline(std::cin, answer);
-            std::cout << "back: " << curr.back << '\n';
-            std::cout << "y/n?\n";
-            getline(std::cin, answer);
-
-            if (answer == "y" || answer == "Y") {
-                curr.next_review = now + (curr.group * 86400);
-                ++curr.group;
-            }
-            else {
-                curr.next_review = now + 86400;
-                curr.group = 1;
-            }
+        if(std::difftime(now, card.next_review) >= 0) {
+            review_logic(card);
         }
-        std::cout << "\n";
     }
 }
 
@@ -47,8 +32,12 @@ void Deck::skip_day() {
     ++day;
 }
 
-void Deck::browse() {
-    for(Card& curr: cards_) {
+int Deck::get_days_skipped() const {
+    return day;
+}
+
+void Deck::browse() const {
+    for(const Card& curr: cards_) {
         const time_t review_time = curr.next_review;
         tm* local_review_time = localtime(&review_time);
         const time_t now = std::time(nullptr) + day * 86400;
