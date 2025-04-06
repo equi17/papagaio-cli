@@ -3,24 +3,24 @@
 #include "deck.h"
 
 void Deck::add_card(const std::string& front, const std::string& back) {
-    cards.emplace_back(front, back, 1, std::time(nullptr));
+    cards_.emplace_back(front, back, 1, std::time(nullptr));
 }
 
 void Deck::delete_card(const int target_id) {
-    auto p = std::find_if(cards.begin(), cards.end(), [target_id](const Card& c){
+    auto p = std::find_if(cards_.begin(), cards_.end(), [target_id](const Card& c){
         return c.get_id() == target_id;
     });
-    if (p == cards.end()) {
+    if (p == cards_.end()) {
         std::cout << "no card with such id found!" << '\n';
     } else {
-        cards.erase(p);
+        cards_.erase(p);
         std::cout << "card deleted!" << '\n';
     }
 }
 
 void Deck::review_cards() {
     std::string answer;
-    for(Card& curr: cards) {
+    for(Card& curr: cards_) {
         time_t now = std::time(nullptr) + day * 86400;
         if(std::difftime(now, curr.next_review) >= 0) {
             std::cout << "front: " << curr.front << '\n';
@@ -48,7 +48,7 @@ void Deck::skip_day() {
 }
 
 void Deck::browse() {
-    for(Card& curr: cards) {
+    for(Card& curr: cards_) {
         const time_t review_time = curr.next_review;
         tm* local_review_time = localtime(&review_time);
         const time_t now = std::time(nullptr) + day * 86400;
