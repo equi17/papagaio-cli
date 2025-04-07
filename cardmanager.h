@@ -10,11 +10,11 @@ public:
     CardManager(std::vector<Deck> decks);
 
     void add_deck();
-    void add_card(int id);
-    void review_cards(int id);
+    void add_card(int id, Deck& deck);
+    void review_cards(int id, Deck& deck);
     void skip_day();
-    void browse_cards(int id);
-    void delete_card(int id);
+    void browse_cards(int id, Deck& deck);
+    void delete_card(int id, Deck& deck);
     int get_int_input(const std::string& prompt) const;
     std::string get_string_input(const std::string& prompt) const;
     void display_main_menu() const;

@@ -22,42 +22,25 @@ void CardManager::add_deck() {
     decks_.emplace_back(name);
 }
 
-void CardManager::add_card(int id) {
-    if (decks_.empty()) {
-        std::cout << "no decks created!\n";
-        return;
-    }
-
+void CardManager::add_card(int id, Deck& deck) {
     std::string front = get_string_input("enter front:\n");
     std::string back = get_string_input("enter back:\n");
 
-    auto deck = find_deck_by_id(id);
-    if(!deck) {
-        std::cout << "there's no deck with such id!\n";
-        return;
-    }
-
-    bool error = deck->get().add_card(front, back);
+    bool error = deck.add_card(front, back);
     if (error)
         std::cout << "there's already a card with this front side!\n";
 }
 
-void CardManager::review_cards(int id) {
-    auto deck = find_deck_by_id(id);
-    if(!deck) {
-        std::cout << "there's no deck with such id!\n";
-        return;
-    }
-
-    deck->get().review_cards([this, &deck](Card& card){
+void CardManager::review_cards(int id,  Deck& deck) {
+    deck.review_cards([this, &deck](Card& card){
         std::cout << "front: " << card.front << "\n";
         std::string answer = get_string_input("your answer: ");
         std::cout << "back: " << card.back << "\n";
  
         std::string correct = get_string_input("did you get it right? (y/n): ");
-        time_t now = std::time(nullptr) + deck->get().get_days_skipped() * 86400;
+        time_t now = std::time(nullptr) + deck.get_days_skipped() * 86400;
  
-        card.update((correct == "y" || correct == "Y"), deck->get().get_days_skipped());
+        card.update((correct == "y" || correct == "Y"), deck.get_days_skipped());
     });
 }
 
@@ -66,24 +49,13 @@ void CardManager::skip_day() {
         d.skip_day();
 }
 
-void CardManager::browse_cards(int id) {
-    auto deck = find_deck_by_id(id);
-    if(!deck) {
-        std::cout << "there's no deck with such id!\n";
-        return;
-    }
-    deck->get().browse();
+void CardManager::browse_cards(int id, Deck& deck) {
+    deck.browse();
 }
 
-void CardManager::delete_card(int id) {
-    auto deck = find_deck_by_id(id);
-    if(!deck) {
-        std::cout << "there's no deck with such id!\n";
-        return;
-    }
-
+void CardManager::delete_card(int id, Deck& deck) {
     int target_id = get_int_input("enter id of card to delete:\n");
-    bool error = deck->get().delete_card(target_id);
+    bool error = deck.delete_card(target_id);
 
     if(error) {
         std::cout << "no card with such id!\n";
@@ -134,6 +106,7 @@ int CardManager::choose_deck() {
 }
 
 void CardManager::display_deck_menu(int deck_id) {
+    Deck& current_deck = find_deck_by_id(deck_id)->get();
     while (true) {
         std::cout << "\n"
                   << "1. add card\n"
@@ -145,16 +118,16 @@ void CardManager::display_deck_menu(int deck_id) {
         int choice = get_int_input("enter your choice:\n");
         switch (choice) {
             case 1:
-                add_card(deck_id);
+                add_card(deck_id, current_deck);
                 break;
             case 2:
-                review_cards(deck_id);
+                review_cards(deck_id, current_deck);
                 break;
             case 3:
-                browse_cards(deck_id);
+                browse_cards(deck_id, current_deck);
                 break;
             case 4:
-                delete_card(deck_id);
+                delete_card(deck_id, current_deck);
                 break;
             case 5:
                 return;
