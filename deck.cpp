@@ -3,8 +3,16 @@
 #include <functional>
 #include "deck.h"
 
-void Deck::add_card(const std::string& front, const std::string& back) {
+bool Deck::add_card(const std::string& front, const std::string& back) {
+    auto it = std::find_if(cards_.begin(), cards_.end(), [&front](const Card& card){ 
+        return card.front == front; 
+    });
+
+    if (it != cards_.end()) {
+        return true;
+    }
     cards_.emplace_back(front, back);
+    return false;
 }
 
 bool Deck::delete_card(const int target_id) {

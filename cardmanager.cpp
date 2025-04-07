@@ -8,7 +8,9 @@ CardManager::CardManager(Deck& deck): deck_(deck) {}
 void CardManager::add_card() {
     std::string front = get_string_input("enter front:\n");
     std::string back = get_string_input("enter front:\n");
-    deck_.add_card(front, back);
+    bool error = deck_.add_card(front, back);
+    if (error)
+    std::cout << "there's already a card with this front side!\n";
 }
 
 void CardManager::review_cards() {
