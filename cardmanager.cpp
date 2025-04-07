@@ -10,7 +10,7 @@ void CardManager::add_card() {
     std::string back = get_string_input("enter front:\n");
     bool error = deck_.add_card(front, back);
     if (error)
-    std::cout << "there's already a card with this front side!\n";
+        std::cout << "there's already a card with this front side!\n";
 }
 
 void CardManager::review_cards() {
