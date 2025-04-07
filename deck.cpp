@@ -3,6 +3,8 @@
 #include <functional>
 #include "deck.h"
 
+Deck::Deck(std::string name): name(name), id(next_id++) {}
+
 bool Deck::add_card(const std::string& front, const std::string& back) {
     auto it = std::find_if(cards_.begin(), cards_.end(), [&front](const Card& card){ 
         return card.front == front; 
@@ -67,4 +69,8 @@ void Deck::browse() const {
         std::cout << "================================";
         std::cout << '\n';
     }
+}
+
+int Deck::get_id() const {
+    return id;
 }
