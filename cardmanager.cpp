@@ -109,6 +109,7 @@ void CardManager::display_deck_menu(int deck_id) {
     Deck& current_deck = find_deck_by_id(deck_id)->get();
     while (true) {
         std::cout << "\n"
+                  << "you are currently in deck \"" << current_deck.name << "\"\n"
                   << "1. add card\n"
                   << "2. review cards\n"
                   << "3. browse cards\n"
