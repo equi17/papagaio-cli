@@ -116,21 +116,52 @@ std::string CardManager::get_string_input(const std::string& prompt) const {
     return input;
 }
 
-void CardManager::display_menu() const {
+void CardManager::display_main_menu() const {
     std::cout << "\n"
-              << "0. add deck\n"
-              << "1. add card\n"
-              << "2. review cards\n"
-              << "3. skip day (test)\n"
-              << "4. browse deck\n"
-              << "5. delete card\n"
-              << "6. exit\n"
+              << "1. add deck\n"
+              << "2. select deck\n"
+              << "3. skip day (for testing)\n"
+              << "4. exit\n"
               << "\n";
 }
 
-int CardManager::choose_deck() const {
+int CardManager::choose_deck() {
     display_decks();
-    return get_int_input("choose deck id:\n");
+    int deck_id =  get_int_input("choose deck id:\n");
+    auto deck = find_deck_by_id(deck_id);
+    if(!deck) return -1;
+    return deck_id;
+}
+
+void CardManager::display_deck_menu(int deck_id) {
+    while (true) {
+        std::cout << "\n"
+                  << "1. add card\n"
+                  << "2. review cards\n"
+                  << "3. browse cards\n"
+                  << "4. delete card\n"
+                  << "5. back to deck selection\n";
+        
+        int choice = get_int_input("enter your choice:\n");
+        switch (choice) {
+            case 1:
+                add_card(deck_id);
+                break;
+            case 2:
+                review_cards(deck_id);
+                break;
+            case 3:
+                browse_cards(deck_id);
+                break;
+            case 4:
+                delete_card(deck_id);
+                break;
+            case 5:
+                return;
+            default:
+                std::cout << "invalid choice!\n";
+        }
+    }
 }
 
 // private member functions

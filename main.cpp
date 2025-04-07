@@ -10,39 +10,27 @@ int main() {
     CardManager manager(myDecks);
 
     while (true) {
-        manager.display_menu();
+        manager.display_main_menu();
         int choice = manager.get_int_input("enter your choice: ");
 
         switch (choice) {
-            case 0: {
+            case 1: {
                 manager.add_deck();
                 break;
             }
-            case 1: {
-                int id = manager.choose_deck(); 
-                manager.add_card(id); 
-                break;
-            }
             case 2: {
-                int id = manager.choose_deck(); 
-                manager.review_cards(id); 
+                int deck_id = manager.choose_deck();
+                if (deck_id != -1) {
+                    manager.display_deck_menu(deck_id);
+                } else {
+                    std::cout << "no deck with such id!\n";
+                }
                 break;
             }
-            case 3: {
-                manager.skip_day(); 
+            case 3:
+                manager.skip_day();
                 break;
-            }
-            case 4: {
-                int id = manager.choose_deck(); 
-                manager.browse_cards(id); 
-                break;
-            }
-            case 5: {
-                int id = manager.choose_deck(); 
-                manager.delete_card(id); 
-                break;
-            }
-            case 6: 
+            case 4:
                 return 0;
             default: 
                 std::cout << "invalid choice!\n";

@@ -17,8 +17,9 @@ public:
     void delete_card(int id);
     int get_int_input(const std::string& prompt) const;
     std::string get_string_input(const std::string& prompt) const;
-    void display_menu() const;
-    int choose_deck() const;
+    void display_main_menu() const;
+    void display_deck_menu(int id);
+    int choose_deck();
 
 private:
     std::vector<Deck> decks_;
