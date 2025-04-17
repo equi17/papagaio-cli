@@ -15,5 +15,6 @@ Minimalist CLI-based spaced repetition tool I made as a pet project
 - Functionality to quit card review
 - Prettier UI^^
 
-Build with make
+Build with make!
+
 No dependencies besides SQLite3 (included)
