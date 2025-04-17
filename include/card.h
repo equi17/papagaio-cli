@@ -8,8 +8,6 @@ class Card {
         std::string back;
         std::time_t next_review;
     
-        static int next_id;
-    
         Card(const std::string& front, const std::string& back, int deck_id);
 
         void update(bool is_correct, int days_skipped);

@@ -3,7 +3,7 @@
 #include <functional>
 #include "deck.h"
 
-Deck::Deck(std::string name): name(name), id(next_id++) {}
+Deck::Deck(const std::string& name): name(name), id(0), day(0) {}
 
 bool Deck::add_card(const std::string& front, const std::string& back) {
     auto it = std::find_if(cards_.begin(), cards_.end(), [&front](const Card& card){ 

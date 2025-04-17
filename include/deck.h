@@ -6,10 +6,9 @@
 
 class Deck{
 public:
-    Deck(std::string name);
+    Deck(const std::string& name);
 
     std::string name;
-    static int next_id;
 
     bool add_card(const std::string& front, const std::string& back);
     void add_card(const Card& card);
@@ -24,7 +23,7 @@ public:
     bool card_exists(const std::string& front) const;
 
 private:
-    int id;
+    int id = 0;
     std::vector<Card> cards_;
     int day = 0;
 };

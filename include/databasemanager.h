@@ -8,7 +8,7 @@ public:
     DatabaseManager(const std::string& dbPath);
 
     void createDeckTable();
-    void saveDeck(const Deck& deck);
+    void saveDeck(Deck& deck);
     std::vector<Deck> loadAllDecks();
     void updateDeck(const Deck& deck);
     

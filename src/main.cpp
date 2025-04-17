@@ -3,9 +3,6 @@
 #include "cardmanager.h"
 #include "databasemanager.h"
 
-int Card::next_id = 1;
-int Deck::next_id = 1;
-
 int main() {
     CardManager manager("data.db");
 

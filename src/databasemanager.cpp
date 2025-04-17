@@ -17,15 +17,25 @@ void DatabaseManager::createDeckTable() {
     )");
 }
 
-void DatabaseManager::saveDeck(const Deck& deck) {
-    SQLite::Statement query(db_, 
-        "INSERT OR REPLACE INTO decks (id, name, days_skipped) VALUES (?, ?, ?)");
-    
-    query.bind(1, deck.get_id());
-    query.bind(2, deck.name);
-    query.bind(3, deck.get_days_skipped());
-    
-    query.exec();
+void DatabaseManager::saveDeck(Deck& deck) {
+    if (deck.get_id() == 0) {
+        SQLite::Statement query(db_, 
+            "INSERT INTO decks (name, days_skipped) VALUES (?, ?)");
+        
+        query.bind(1, deck.name);
+        query.bind(2, deck.get_days_skipped());
+        query.exec();
+        
+        deck.set_id(db_.getLastInsertRowid());
+    } else {
+        SQLite::Statement query(db_,
+            "UPDATE decks SET name = ?, days_skipped = ? WHERE id = ?");
+            
+        query.bind(1, deck.name);
+        query.bind(2, deck.get_days_skipped());
+        query.bind(3, deck.get_id());
+        query.exec();
+    }
 }
 
 void DatabaseManager::updateDeck(const Deck& deck) {
