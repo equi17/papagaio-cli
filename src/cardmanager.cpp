@@ -151,6 +151,10 @@ void CardManager::display_main_menu() const {
 }
 
 int CardManager::choose_deck() {
+    if(decks_.empty()) {
+        std::cout << "no decks to select!\n";
+        return 0;
+    }
     display_decks();
     int deck_id =  get_int_input("choose deck id:\n");
     auto deck = find_deck_by_id(deck_id);

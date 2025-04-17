@@ -21,9 +21,9 @@ int main() {
             }
             case 3: {
                 int deck_id = manager.choose_deck();
-                if (deck_id != -1) {
+                if (deck_id > 0) {
                     manager.display_deck_menu(deck_id);
-                } else {
+                } else if (deck_id == -1) {
                     std::cout << "no deck with such id!\n";
                 }
                 break;
