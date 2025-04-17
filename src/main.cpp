@@ -16,6 +16,10 @@ int main() {
                 break;
             }
             case 2: {
+                manager.delete_deck();
+                break;
+            }
+            case 3: {
                 int deck_id = manager.choose_deck();
                 if (deck_id != -1) {
                     manager.display_deck_menu(deck_id);
@@ -24,10 +28,10 @@ int main() {
                 }
                 break;
             }
-            case 3:
+            case 4:
                 manager.skip_day();
                 break;
-            case 4:
+            case 5:
                 return 0;
             default: 
                 std::cout << "invalid choice!\n";

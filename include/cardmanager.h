@@ -12,6 +12,7 @@ public:
     DatabaseManager db_;
 
     void add_deck();
+    void delete_deck();
     void add_card(Deck& deck);
     void review_cards(Deck& deck);
     void skip_day();

@@ -26,6 +26,33 @@ void CardManager::add_deck() {
     decks_.push_back(newDeck);
 }
 
+void CardManager::delete_deck() {
+    display_decks();
+    if(decks_.empty()) {
+        std::cout << "no decks to delete!\n";
+        return;
+    }
+
+    int target_id = get_int_input("enter id of deck to delete:\n");
+    
+    try {
+        db_.deleteDeck(target_id);
+
+        auto it = std::find_if(decks_.begin(), decks_.end(), 
+            [target_id](const Deck& d){ return d.get_id() == target_id; }
+        );
+
+        if (it != decks_.end()) {
+            decks_.erase(it);
+            std::cout << "deck deleted\n";
+            return;
+        }
+        std::cout << "deck deleted from DB but not found in memory!\n";
+    } catch (const std::exception& e) {
+        std::cerr << "error deleting deck: " << e.what() << "\n";
+    }
+}
+
 void CardManager::add_card(Deck& deck) {
     std::string front = get_string_input("enter front:\n");
     std::string back = get_string_input("enter back:\n");
@@ -116,9 +143,10 @@ std::string CardManager::get_string_input(const std::string& prompt) const {
 void CardManager::display_main_menu() const {
     std::cout << "\n"
               << "1. add deck\n"
-              << "2. select deck\n"
-              << "3. skip day (for testing)\n"
-              << "4. exit\n"
+              << "2. delete deck\n"
+              << "3. select deck\n"
+              << "4. skip day (for testing)\n"
+              << "5. exit\n"
               << "\n";
 }
 

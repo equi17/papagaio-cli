@@ -2,6 +2,7 @@
 
 DatabaseManager::DatabaseManager(const std::string& dbPath)
     : db_(dbPath, SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE) {
+    db_.exec("PRAGMA foreign_keys = ON");
     createDeckTable();
     createCardTable(); 
 }
@@ -48,6 +49,15 @@ void DatabaseManager::updateDeck(const Deck& deck) {
     query.bind(2, deck.get_id());
 
     query.exec();
+}
+
+void DatabaseManager::deleteDeck(const int deck_id) {
+    SQLite::Statement query(db_,
+        "DELETE FROM decks WHERE id = ?");
+    query.bind(1, deck_id);
+    if (query.exec() == 0) {
+        throw std::runtime_error("No card found with ID " + std::to_string(deck_id));
+    }
 }
 
 std::vector<Deck> DatabaseManager::loadAllDecks() {

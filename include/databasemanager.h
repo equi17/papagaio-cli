@@ -11,6 +11,7 @@ public:
     void saveDeck(Deck& deck);
     std::vector<Deck> loadAllDecks();
     void updateDeck(const Deck& deck);
+    void deleteDeck(const int deck_id);
     
     void createCardTable();
     void saveCard(Card& card, const int deck_id);
