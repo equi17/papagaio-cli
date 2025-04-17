@@ -3,17 +3,27 @@
 #include "card.h"
 
 //public functions
-Card::Card(std::string front, std::string back)
-    : front(front), back(back), next_review(std::time(nullptr)), id(next_id++) {};
+Card::Card(const std::string& front, const std::string& back, int deck_id)
+        : front(front), back(back), deck_id(deck_id), 
+          next_review(time(nullptr)), id(0), ease(2.5), 
+          repetitions(0), interval(1) {}
 
 void Card::update(bool is_correct, int days_skipped) {
     if (is_correct) advance(days_skipped);
     else            reset();
 }
 
-const int Card::get_id() const {
-    return id;
-}
+const int Card::get_id() const { return id; }
+const int Card::get_deck_id() const { return deck_id; }
+const int Card::get_interval() const { return interval; }
+const float Card::get_ease() const { return ease; }
+const int Card::get_repetitions() const { return repetitions; }
+
+void Card::set_id(int i) { id = i; }
+void Card::set_repetitions(int r) { repetitions = r; }
+void Card::set_deck_id(int di) { deck_id = di; }
+void Card::set_interval(int i) { interval = i; }
+void Card::set_ease(int e) { ease = e; }
 
 //private functions
 void Card::reset() {

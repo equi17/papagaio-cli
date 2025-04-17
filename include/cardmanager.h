@@ -4,17 +4,19 @@
 #include <optional>
 #include <functional>
 #include "deck.h"
+#include "databasemanager.h"
 
 class CardManager {
 public:
-    CardManager(std::vector<Deck> decks);
+    CardManager(const std::string& dbPath);
+    DatabaseManager db_;
 
     void add_deck();
-    void add_card(int id, Deck& deck);
-    void review_cards(int id, Deck& deck);
+    void add_card(Deck& deck);
+    void review_cards(Deck& deck);
     void skip_day();
-    void browse_cards(int id, Deck& deck);
-    void delete_card(int id, Deck& deck);
+    void browse_cards(Deck& deck);
+    void delete_card(Deck& deck);
     int get_int_input(const std::string& prompt) const;
     std::string get_string_input(const std::string& prompt) const;
     void display_main_menu() const;

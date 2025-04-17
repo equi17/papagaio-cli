@@ -10,6 +10,7 @@ set(SOURCES
     src/main.cpp
     src/deck.cpp
     src/cardmanager.cpp
+    src/databasemanager.cpp
     src/card.cpp
 )
 

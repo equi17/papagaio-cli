@@ -13,8 +13,12 @@ bool Deck::add_card(const std::string& front, const std::string& back) {
     if (it != cards_.end()) {
         return true;
     }
-    cards_.emplace_back(front, back);
+    cards_.emplace_back(front, back, id);
     return false;
+}
+
+void Deck::add_card(const Card& card) {
+    cards_.push_back(card);
 }
 
 bool Deck::delete_card(const int target_id) {
@@ -24,9 +28,9 @@ bool Deck::delete_card(const int target_id) {
 
     if (it != cards_.end()) {
         cards_.erase(it);
-        return false;
+        return true;
     }
-    return true;
+    return false;
 }
 
 void Deck::review_cards(std::function<void(Card&)> review_logic) {
@@ -73,4 +77,17 @@ void Deck::browse() const {
 
 int Deck::get_id() const {
     return id;
+}
+
+void Deck::set_days_skipped(int days_skipped) {
+    day = days_skipped;
+}
+
+void Deck::set_id(int deck_id) {
+    id = deck_id;
+}
+
+bool Deck::card_exists(const std::string& front) const {
+    return std::any_of(cards_.begin(), cards_.end(),
+        [&front](const Card& c) { return c.front == front; });
 }

@@ -5,7 +5,9 @@
 #include <ctime>
 
 // public member functions
-CardManager::CardManager(std::vector<Deck> decks): decks_(std::move(decks)) {}
+CardManager::CardManager(const std::string& dbPath): db_(dbPath) {
+    decks_ = db_.loadAllDecks();
+}
 
 void CardManager::add_deck() {
     std::string name = get_string_input("enter deck name:\n");
@@ -19,19 +21,34 @@ void CardManager::add_deck() {
         return;
     }
 
-    decks_.emplace_back(name);
+    Deck newDeck(name);
+    db_.saveDeck(newDeck);
+    decks_.push_back(newDeck);
 }
 
-void CardManager::add_card(int id, Deck& deck) {
+void CardManager::add_card(Deck& deck) {
     std::string front = get_string_input("enter front:\n");
     std::string back = get_string_input("enter back:\n");
 
-    bool error = deck.add_card(front, back);
-    if (error)
-        std::cout << "there's already a card with this front side!\n";
+    if (deck.card_exists(front)) {
+        std::cout << "card with this front already exists in this deck!\n";
+        return;
+    }
+
+    try {
+        Card new_card(front, back, deck.get_id());
+        
+        db_.saveCard(new_card, deck.get_id());
+        
+        deck.add_card(new_card);
+        
+        std::cout << "card added successfully (id: " << new_card.get_id() << ")\n";
+    } catch (const std::exception& e) {
+        std::cerr << "failed to add card: " << e.what() << "\n";
+    }
 }
 
-void CardManager::review_cards(int id,  Deck& deck) {
+void CardManager::review_cards(Deck& deck) {
     deck.review_cards([this, &deck](Card& card){
         std::cout << "front: " << card.front << "\n";
         std::string answer = get_string_input("your answer: ");
@@ -41,26 +58,34 @@ void CardManager::review_cards(int id,  Deck& deck) {
         time_t now = std::time(nullptr) + deck.get_days_skipped() * 86400;
  
         card.update((correct == "y" || correct == "Y"), deck.get_days_skipped());
+        db_.updateCard(card);
     });
 }
 
 void CardManager::skip_day() {
-    for(auto& d: decks_)
+    for(auto& d: decks_) {
         d.skip_day();
+        db_.updateDeck(d);
+    }
 }
 
-void CardManager::browse_cards(int id, Deck& deck) {
+void CardManager::browse_cards(Deck& deck) {
     deck.browse();
 }
 
-void CardManager::delete_card(int id, Deck& deck) {
+void CardManager::delete_card(Deck& deck) {
     int target_id = get_int_input("enter id of card to delete:\n");
-    bool error = deck.delete_card(target_id);
-
-    if(error) {
-        std::cout << "no card with such id!\n";
-    } else {
-        std::cout << "card deleted\n";
+    
+    try {
+        db_.deleteCard(target_id);
+        
+        if (!deck.delete_card(target_id)) {
+            std::cout << "card deleted from DB but not found in memory!\n";
+        } else {
+            std::cout << "card deleted\n";
+        }
+    } catch (const std::exception& e) {
+        std::cerr << "error deleting card: " << e.what() << "\n";
     }
 }
 
@@ -119,16 +144,16 @@ void CardManager::display_deck_menu(int deck_id) {
         int choice = get_int_input("enter your choice:\n");
         switch (choice) {
             case 1:
-                add_card(deck_id, current_deck);
+                add_card(current_deck);
                 break;
             case 2:
-                review_cards(deck_id, current_deck);
+                review_cards(current_deck);
                 break;
             case 3:
-                browse_cards(deck_id, current_deck);
+                browse_cards(current_deck);
                 break;
             case 4:
-                delete_card(deck_id, current_deck);
+                delete_card(current_deck);
                 break;
             case 5:
                 return;

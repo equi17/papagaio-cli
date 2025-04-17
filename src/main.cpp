@@ -1,13 +1,13 @@
 #include <iostream>
 #include <vector>
 #include "cardmanager.h"
+#include "databasemanager.h"
 
 int Card::next_id = 1;
 int Deck::next_id = 1;
 
 int main() {
-    std::vector<Deck> myDecks;
-    CardManager manager(myDecks);
+    CardManager manager("data.db");
 
     while (true) {
         manager.display_main_menu();
